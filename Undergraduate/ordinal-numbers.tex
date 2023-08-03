@@ -1,0 +1,1141 @@
+\documentclass[a4paper,11pt]{article}
+
+
+\title{Ordinal Numbers}
+\author{Ryan Tay, MA213 Second Year Essay}
+\date{17 April 2023}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{cite}
+\usepackage{mathrsfs}
+\usepackage{array}
+\usepackage{amsthm}
+\usepackage[numbers]{natbib}
+\bibliographystyle{plainnat}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage[scale=1,top=2.54cm, left=2.54cm, right=2.54cm, bottom=2.54cm]{geometry}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection] 
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition} 
+\newtheorem*{cor}{Corollary} 
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{eg}[thm]{Example}
+\newtheorem{axiom}{Axiom}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark} 
+\newtheorem{case}{Case}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+It is common to introduce both ordinal and cardinal numbers in any text covering the construction and generalisation of natural numbers, however we shall restrict ourselves to only ordinal numbers here. Ordinal numbers can be thought of as generalisations of natural numbers, where we prioritise position and order over cardinality. Through the approach of axiomatic set theory, we will develop ordinal numbers and explore how we may use them.
+
+This essay is broken into three sections: a preliminaries section covering the basic theory of sets and relations (which the reader may skip), a section on the construction of ordinal numbers, and a section on some applications of ordinal numbers.
+\end{abstract}
+
+\tableofcontents
+\pagebreak
+
+\section{Introduction and Preliminaries}
+\label{sec:Prelim}
+This essay will largely follow the approach taken in \textit{Axiomatic Set Theory} by Patrick Suppes~\citep{SuppesBook}. In particular, we shall assume the existence of urelements (objects which are not sets), and the notion of classes will not be developed. For a more modern approach, we recommend \textit{Set Theory} by Thomas Jech~\citep{JechBook}.
+
+This section is devoted to defining notations and developing the tools which we shall use throughout the essay. If the reader is comfortable with the basic theory of sets and relations the reader may skip ahead to the heart of the essay, from \hyperref[sec:OrdinalNumbers]{Section 2} onwards, and may revisit this section if needed.
+
+The development of mathematical logic and the notion of equality, where we write $x=y$ to mean ``the objects $x$ and $y$ are equal", deserves extensive discussion and is fully developed in Whitehead and Russell 1910~\cite{Principia}. We shall assume all results from mathematical logic as well as the properties of equality. The symbols we require are defined below for logical statements $P$ and $Q$.
+
+\begin{center}
+\begin{tabular}{||c c||} 
+ \hline
+ Notation & Meaning \\
+ \hline\hline
+ $P \land Q$ & $P$ and $Q$ \\ 
+ \hline
+ $P \lor Q$ & $P$ or $Q$ \\
+ \hline
+ $\lnot P$ & $P$ is false \\
+ \hline
+ $P \implies Q$ & If $P$ then $Q$ \\
+ \hline
+ $P \iff Q$ & $P$ if and only if $Q$ \\
+ \hline
+ $(\forall x)P$ & For all objects $x$, $P$ \\
+ \hline
+ $(\exists x)P$ & There exists an object $x$ such that $P$ \\
+ \hline
+ $(\exists! x)P$ & There exists a unique object $x$ such that $P$ \\
+ \hline
+ $(\nexists x)P$ & There does not exist an object $x$ such that $P$ \\
+ \hline
+\end{tabular}
+\end{center}
+
+We also adopt the notation $x := y$ to mean ``the object $x$ is defined to satisfy $x = y$'', and the notation $x \neq y$ to mean $\lnot (x=y)$.
+
+\subsection{ZFC Set Theory}
+\label{subsec:ZFC}
+The ZFC axioms are the axioms of \citeauthor{Zermelo1908}-\citeauthor{Fraenkel1922} set theory together with the axiom of choice. They are the most widely accepted axiomatic system among mathematicians~\cite[p.~4]{Ciesielski1997}, and we will adopt them as laid out by Suppes 1960~\citep{SuppesBook}.
+
+We start with two special symbols: $\in$ and $\varnothing$. We treat $\varnothing$ as a special constant, which we shall later define, and we write $x \in y$ to mean ``the object $x$ is a member of the object $y$''. We will write $x\notin y$ if and only if $\lnot (x\in y)$. With these, we define the notion of a \textit{set}.
+
+\begin{defn}[Sets]
+\label{defn:set}
+An object $x$ is a \textit{set} if and only if $(\exists y)(y \in x) \ \lor \ (x = \varnothing)$.
+\end{defn}
+\begin{rem}
+From Definition~\ref{defn:set}, we observe that $\varnothing$ is a set. 
+\end{rem}
+To avoid the repetition of the predicate ``is a set'', we will use capital Latin alphabets ($A, B, C, \dots$) to denote sets, and lower case Latin alphabets ($x,y,z\dots$) to denote general objects. To reduce the number of parentheses, we establish the following order of precedence for logical symbols, listed in order of priority:
+\begin{enumerate}
+\item $\forall$, $\exists$, $\exists!$, and $\lnot$;
+\item $=$, $\neq$, $\in$, and $\notin$;
+\item $\land$ and $\lor$;
+\item $\implies$ and $\iff$.
+\end{enumerate}
+
+\noindent For example, ``$x \in A \ \lor \ x \neq B$ $\iff P$'' means  ``$((x \in A) \lor (x \neq B)) \iff P$''. We also adopt the following conventions: 
+\begin{itemize}
+\item ``$(\exists x \in A) P$'' means ``$(\exists x)(x \in A \ \land \ P)$'', 
+\item ``$(\forall x \in A) P$'' means ``$(\forall x)(x \in A \implies P)$'',
+\item ``$x,y\in A$'' means ``$(x\in A)\ \land \ (y\in A)$'', and 
+\item ``$x,y,z\in A$'' means ``$(x\in A)\ \land \ (y\in A) \ \land \ (z\in A)$''.
+\end{itemize}
+
+\subsubsection{The Axioms, Part 1}
+\label{subsubsec:AxiomsPart1}
+Our first five axioms are as follows.
+
+\begin{axiom}[Axiom of Extensionality]
+\label{axiom:extensionality}
+Let $A$ and $B$ be sets. Then 
+\[(\forall x)(x\in A \iff x\in B) \implies A = B.\]
+\end{axiom}
+\begin{rem}
+We can establish the converse by using the properties of equality.
+\end{rem}
+
+\begin{axiom}[Axiom Schema of Separation]
+\label{axiom:separation}
+Let $A$ be a set, and $\varphi(x)$ be a logical statement depending on the variable $x$. Then
+\[(\exists B)(\forall x)(x\in B \iff x \in A \ \land \ \varphi(x)).\]
+\end{axiom}
+\begin{rem}
+Notice that, by our convention of using capital letters for sets, we require that $B$ is a set. Moreover, by the \hyperref[axiom:extensionality]{axiom of extensionality}, this set $B$ is unique.
+\end{rem}
+
+\begin{axiom}[Axiom of Pairing]
+\label{axiom:pairing}
+Let $x$ and $y$ be objects. Then
+\[(\exists A)(\forall z)(z\in A \iff z = x \ \lor \ z = y).\]
+\end{axiom}
+\begin{rem}
+As before, $A$ is a set and, by the \hyperref[axiom:extensionality]{axiom of extensionality}, is unique. We define the notation $\{x, y\} := A$, where $A$ satisfies the axiom of pairing for $x$ and $y$.
+\end{rem}
+
+\begin{axiom}[Axiom of Union]
+\label{axiom:union}
+Let $A$ be a set which may contain sets. Then
+\[(\exists B)(\forall x)(x\in B \iff (\exists C\in A)(x\in C)).\]
+\end{axiom}
+\begin{rem}
+Again, $B$ is the unique set with this property. We define the notation $\bigcup A := B$, where $B$ satisfies the axiom of union for the set $A$.
+\end{rem}
+
+\begin{axiom}[Axiom Schema of Replacement]
+\label{axiom:replacement}
+Let $A$ be a set and $\varphi(p,q)$ be a logical statement depending on two variables $p$ and $q$. Suppose that
+\[(\forall x\in A)(\forall y)(\forall z)(\varphi(x,y) \ \land \ \varphi(x, z) \implies y = z).\]
+Then 
+\[(\exists B)(\forall y)(y \in B \iff (\exists x \in A)(\varphi(x, y))).\]
+\end{axiom}
+\begin{rem}
+This set $B$ is, again, unique.
+\end{rem}
+
+\subsubsection{Developing Basic Set Theory, Part 1}
+\label{subsubsec:SetTheoryPart1}
+Before introducing the remaining axioms, we first develop some set theory to introduce some notations in set theory. The aim of this section is just to define basic operations in set theory, and not to derive their properties. We leave those developments to Suppes 1960~\citep[pp. 14--89]{SuppesBook}.
+
+\begin{thm}
+\label{thm:EmptySetIsEmpty}
+There exists a unique set $A$ such that $(\forall x)(x \notin A)$, and $A = \varnothing$.
+\end{thm}
+\begin{proof}
+From the \hyperref[axiom:separation]{axiom schema of separation}, there exists a set $B$ such that
+\[(\forall x)(x\in B \iff x \in \varnothing \ \land \ x \neq x)\]
+since $\varnothing$ is a set. Now notice that $(\forall x)(x \notin B)$, since $x \neq x$ is always false. Since $B$ is a set, Definition~\ref{defn:set} requires $B = \varnothing$. Thus we obtain 
+\[(\forall x)(x \in \varnothing \iff x \in \varnothing \ \land \ x \neq x),\]
+which reduces to
+\[(\forall x)(x \in \varnothing \implies x \neq x).\]
+Therefore $(\forall x)(x \notin \varnothing)$. So the existence condition is satisfied by $\varnothing$. Uniqueness then follows from the \hyperref[axiom:extensionality]{axiom of extensionality}.
+\end{proof}
+\begin{rem}
+This justifies naming $\varnothing$ \textit{the empty set}.
+\end{rem}
+
+The theorem below shows that a ``universal set'' cannot exist in ZFC set theory.
+\begin{thm}
+\label{thm:RussellsParadox}
+There does not exist a set $V$ such that $(\forall x)(x \in V)$.
+\end{thm}
+\begin{proof}
+Suppose, for a contradiction, such a set $V$ exists. Then, from the \hyperref[axiom:separation]{axiom schema of separation},
+\[(\exists B)(\forall x)(x\in B \iff x \in V \ \land \ x \notin x).\]
+Since we have $(\forall x)(x \in V)$, this reduces to
+\[(\exists B)(\forall x)(x\in B \iff x \notin x).\]
+Now, taking $x = B$, this yields the absurd result $B \in B \iff B \notin B$.
+\end{proof}
+
+We now introduce notation for sets of all objects with a specified property.
+\begin{defn}
+\label{defn:class1}
+Let $\varphi(x)$ be a logical statement depending on $x$. We define $\{x:\varphi(x)\} := A$ where $A$ is the set which satisfies
+\[(\forall x)(x \in A \iff \varphi(x))\ \lor\ (A = \varnothing \ \land \ (\nexists B)(\forall x)(x \in B \iff \varphi(x))).\]
+\end{defn}
+This definition is purposely clunky to avoid the construction of sets in which paradoxes such as Russell's paradox~\citep{RussellPrinciples} may arise. Due to Theorem~\ref{thm:RussellsParadox}, we require $\{x : x=x\} = \varnothing$. 
+
+We also introduce the following more flexible notations.
+
+\begin{defn}
+\label{defn:class2}
+Let $A$ be a set and $\varphi(x)$ be a logical statement depending on $x$. We define
+\[\{x \in A : \varphi(x)\} := \{x : x \in A \ \land \ \varphi(x)\}.\]
+\end{defn}
+
+\begin{defn}
+\label{defn:class3}
+Let $\varphi(x_1,\dots,x_n)$ be a logical statement depending on the variables $x_1,\dots,x_n$, and let $\tau(x_1,\dots,x_n)$ be a \textit{term} depending on $x_1,\dots,x_n$ (which is any valid construction of objects from the variables $x_1,\dots,x_n$). We define 
+$$
+\{\tau(x_1,\dots,x_n) : \varphi(x_1,\dots,x_n)\} := \{y : (\exists x_1)\dots(\exists x_n)(y = \tau(x_1,\dots,x_n) \ \land \ \varphi(x_1,\dots,x_n))\}. 
+$$
+\end{defn}
+
+We now start to develop basic tools in set theory. The definitions of a set being a \textit{subset} or a \textit{proper subset} of another set are straightforward.
+\begin{defn}[Subsets]
+\label{defn:subset}
+Let $A$ and $B$ be sets. We write $A \subseteq B$ if and only if $(\forall x)(x \in A \implies x \in B)$. Furthermore, we write $A \subset B$ if and only if $A \subseteq B$ and $A \neq B$.
+\end{defn}
+
+Before defining the \textit{union}, \textit{intersection}, and \textit{set difference} of two sets, we must first prove that such sets exist and are unique.
+
+\begin{thm}
+\label{thm:UnionOfSets}
+Let $A$ and $B$ be sets. Then $(\exists! C)(\forall x)(x\in C \iff x \in A \ \lor \ x \in B)$.
+\end{thm}
+\begin{proof}
+From the pairing and union axioms, $\bigcup \{A,B\}$ exists. Then for all $x$,
+$$
+x \in \bigcup \{A, B\} \iff (\exists D\in\{A,B\})(x \in D) \iff x \in A \ \lor \ x \in B.
+$$
+So the existence claim is satisfied by $\bigcup \{A, B\}$. For uniqueness, suppose for some set $C'$ we have $(\forall x)(x\in C' \iff x \in A \ \lor \ x \in B)$. Then for all $x$,
+\[
+x \in C' \iff x \in A \ \lor \ x \in B \iff x \in \bigcup\{A,B\},
+\]
+and thus by the \hyperref[axiom:extensionality]{extensionality axiom} $C' = \bigcup \{A, B\}$.
+\end{proof}
+
+\begin{thm}
+\label{thm:IntersectionOfSets}
+Let $A$ and $B$ be sets. Then $(\exists! C)(\forall x)(x \in C \iff x \in A \ \land \ x \in B)$.
+\end{thm}
+\begin{proof}
+The existence of such $C$ follows from the \hyperref[axiom:separation]{axiom schema of separation}, with $\varphi(x)$ as $x \in B$. Uniqueness is proved similarly as in Theorem~\ref{thm:UnionOfSets}.
+\end{proof}
+
+\begin{thm}
+\label{thm:DifferenceOfSets}
+Let $A$ and $B$ be sets. Then $(\exists! C)(\forall x)(x \in C \iff x \in A \ \land \ x \notin B)$.
+\end{thm}
+\begin{proof}
+Similarly as in Theorem~\ref{thm:IntersectionOfSets}.
+\end{proof}
+
+Theorems \ref{thm:UnionOfSets}, \ref{thm:IntersectionOfSets}, and \ref{thm:DifferenceOfSets} justify the following three definitions.
+\begin{defn}[Unions, Intersections, and Set Differences]
+\label{defn:SetAlgebra}
+Let $A$ and $B$ be sets. We define 
+\begin{align*}
+A \cup B &:= \{x : x \in A\  \lor \ x \in B\}, \\
+A \cap B &:= \{x : x \in A\  \land \ x \in B\}, \\
+A \setminus B &:= \{x : x \in A\  \land \ x \notin B\}.
+\end{align*}
+\end{defn}
+
+We can also construct of sets by simply listing their elements. Note that due to the \hyperref[axiom:pairing]{axiom of pairing}, for any objects $x$ and $y$, there exists a set $\{x,y\}$ containing only $x$ and $y$.
+\begin{defn}
+For an object $x, y, z, w$, define $\{x\} := \{x, x\}$; \\
+for objects $x, y, z$, define $\{x, y, z\} := \{x, y\} \cup \{z\}$; \\
+for objects $x, y, z, w$, define $\{x, y, z, w\} := \{x, y, z\} \cup \{w\}$; \\
+and so on.
+\end{defn}
+
+\begin{defn}
+Let $A$ be a set, and let $\tau(x)$ be a term depending on the variable $x$. Then
+\[\bigcup_{x\in A}\tau(x) := \bigcup \{y:(\exists x\in A)(y=\tau(x))\}.\]
+\end{defn}
+
+We have the following theorem justifying the existence of this set.
+\begin{thm}
+Let $A$ be a set, and let $\tau(x)$ be a term depending on the variable $x$. Then for all $y$,
+\[y\in\bigcup_{x\in A}\tau(x) \iff (\exists x\in A)(\exists B)(B = \tau(x) \ \land \ y \in B).\]
+\end{thm}
+\begin{proof}
+Define the logical statement $\varphi(x,y)$ to be true if and only if $x\in A$ and $y = \tau(x)$. If $\varphi(x,y)$ and $\varphi(x,z)$ are both true, then we easily conclude that $y = z$. Hence by the \hyperref[axiom:replacement]{axiom schema of replacement} on $A$ and $\varphi$, we obtain
+\[(\exists C)(\forall z)(z \in C \iff (\exists x\in A)(z = \tau(x))).\]
+Using the \hyperref[axiom:union]{axiom of union} on $C$ then gives the desired result.
+\end{proof}
+
+
+\subsubsection{The Axioms, Part 2}
+\label{subsubsec:AxiomsPart2}
+We now complete our collection of the axioms of Zermelo-Fraenkel set theory. The axiom of choice will be introduced in Section~\ref{subsec:Func}, after developing functions.
+
+\begin{axiom}[Axiom of Power Set]
+\label{axiom:power}
+Let $A$ be a set. Then
+\[(\exists B)(\forall C)(C \subseteq A \implies C \in B).\]
+\end{axiom}
+\begin{rem}
+We can establish the converse of the axiom of power set as follows. Due to the axiom schema of separation, $(\exists D)(\forall x)(x \in D \iff x \in B \ \land \ x \subseteq A)$. Now due to the power set axiom, this reduces to the desired $(\exists D)(\forall C)(C \in D \iff C \subseteq A)$. Furthermore, by the \hyperref[axiom:extensionality]{axiom of extensionality}, this set $D$ is unique. Thus we define the \textit{power set} of $A$ as $\mathscr{P}(A) := D$.
+\end{rem}
+
+\begin{axiom}[Axiom of Regularity]
+\label{axiom:regularity}
+Let $A$ be a set such that $A \neq \varnothing$. Then
+\[(\exists x\in A)(\forall y\in x)(y \notin A).\]
+\end{axiom}
+\begin{rem}
+Intuitively, this says $(\exists x \in A)(x \cap A = \varnothing)$. The purpose of the axiom being formulated this way is for the case when $x$ is not a set, and so intersections with $x$ are not defined.
+\end{rem}
+
+\begin{axiom}[Axiom of Infinity]
+\label{axiom:infinity}
+There exists a set $A$ such that
+\[\varnothing \in A \ \land \ (\forall B\in A)(B \cup \{B\} \in A).\]
+\end{axiom}
+
+\subsubsection{Developing Basic Set Theory, Part 2}
+\label{subsubsec:SetTheoryPart2}
+\begin{defn}
+For objects $x$ and $y$, the \textit{ordered pair} $(x, y)$ is defined as $(x, y) := \{\{x\}, \{x, y\}\}$.
+\end{defn}
+
+\begin{defn}[Cartesian Products]
+Let $A$ and $B$ be sets. We define 
+\[A \times B := \{(x, y) : x\in A \ \land \ y \in B\}.\]
+\end{defn}
+Due to Definitions \ref{defn:class1} and \ref{defn:class3}, we require the following theorem to avoid $A\times B$ simply being the empty set.
+
+\begin{thm}
+\label{thm:CartesianProductExistence}
+Let $A$ and $B$ be sets. Then for all $z$, we have $z \in A\times B$ if and only if
+\begin{equation}
+\label{eqn:CartesianProductExistence}
+(\exists x \in A)(\exists y \in B)(z = (x, y)).
+\end{equation}
+\end{thm}
+\begin{proof}
+Due to Definition~\ref{defn:class1}, it suffices to show that there exists a set $C$ such that for all $z$, we have $z \in C$ if and only if (\ref{eqn:CartesianProductExistence}) holds.
+
+Now, from the \hyperref[axiom:separation]{axiom schema of separation}, there exists a set $C$ such that for all $z$, we have that $z \in C$ if and only if $z \in \mathscr P(\mathscr P (A \cup B))$ and (\ref{eqn:CartesianProductExistence}) holds. So if we show that (\ref{eqn:CartesianProductExistence}) implies $z \in \mathscr P(\mathscr P (A \cup B))$, then we are done.
+
+Suppose (\ref{eqn:CartesianProductExistence}) holds, so $z = \{\{x\}, \{x, y\}\}$ for some $x \in A$ and $y \in B$. Now it is clear that $\{x\}, \{x, y\} \subseteq A \cup B$, therefore $\{x\}, \{x, y\} \in \mathscr P(A \cup B)$. This then gives us $\{\{x\}, \{x,y\}\} \subseteq \mathscr P(A\cup B)$, and hence $\{\{x\}, \{x,y\}\} \in \mathscr P (\mathscr P (A \cup B))$.
+\end{proof}
+
+It is also worth noting that the \hyperref[axiom:regularity]{axiom of regularity} gives us the following two important theorems.
+\begin{thm}
+\label{thm:AinA}
+For all sets $A$, we have $A \notin A$.
+\end{thm}
+\begin{proof}
+Suppose, for a contradiction, that $(\exists A)(A \in A)$. Clearly we have $A \in \{A\}$, and so $A \in A \cap \{A\}$. However, from the \hyperref[axiom:regularity]{axiom of regularity}, $(\exists x \in \{A\})(x \cap \{A\} = \varnothing)$ and thus $A \cap \{A\} = \varnothing$ since $A$ is the only element of $\{A\}$. This gives us the absurd result $A \in \varnothing$.
+\end{proof}
+
+\begin{thm}
+\label{thm:AinBandBinA}
+For all sets $A$ and $B$, we have $\lnot(A\in B \ \land \ B\in A)$.
+\end{thm}
+\begin{proof}
+Suppose, for a contradiction, that $(\exists A)(\exists B)(A\in B \ \land \ B\in A)$. Then $A \in \{A,B\} \cap B$ and $B \in \{A,B\}\cap A$. Now by the \hyperref[axiom:regularity]{axiom of regularity}, $(\exists x\in\{A,B\})(x \cap \{A,B\} = \varnothing)$. This requires $x = A$ or $x = B$. However we then obtain $\{A,B\} \cap B = \varnothing$ or $\{A,B\}\cap A = \varnothing$, giving the contradiction $A \in \varnothing$ or $B \in \varnothing$.
+\end{proof}
+
+\subsection{Relations}
+\subsubsection{Binary Relations}
+\begin{defn}[Relations]
+Let $A$ and $B$ be sets. A set $R$ is a \textit{(binary) relation} on $A\times B$ if and only if $R \subseteq A \times B$. For a relation $R$, we write $xRy$ if and only if $(x, y) \in R$.
+\end{defn}
+
+\begin{defn}[Domains and Images of Relations]
+The \textit{domain} and \textit{image} of a relation $R$ are defined, respectively, as
+\begin{align*}
+\mathrm{Dom} (R) &:= \{x : (\exists y)(xRy)\}, \\
+\mathrm{Im} (R) &:= \{y : (\exists x)(xRy)\}.
+\end{align*}
+\end{defn}
+\begin{rem} The proofs that the sets $\mathrm{Dom}(R)$ and $\mathrm{Im}(R)$ are not simply the empty set follow a similar argument as in Theorem~\ref{thm:CartesianProductExistence}, using the \hyperref[axiom:separation]{axiom schema of separation} on the set $\bigcup \bigcup R$.
+\end{rem}
+
+\begin{defn}[Converse Relations]
+The \textit{converse} of a relation $R$ is $R^T := \{(y, x) : xRy\}$.
+\end{defn}
+\begin{rem}
+The proof that $R^T$ is not simply the empty set also follows a similar argument to Theorem~\ref{thm:CartesianProductExistence}, using the \hyperref[axiom:separation]{axiom schema of separation} on the set $\textrm{Im}(R) \times \mathrm{Dom}(R)$.
+\end{rem}
+
+\begin{defn}[Restrictions of Relations]
+Let $R$ be a relation and $A$ be a set. Then
+\[R|_A := R \cap (A \times \textrm{Im}(R)).\]
+\end{defn}
+\noindent It is clear that $R^T$ and $R|_A$ above are relations.
+
+\subsubsection{Functions}
+\label{subsec:Func}
+\begin{defn}[Functions]
+A relation $f$ is a \textit{function} if and only if 
+\[(\forall x)(\forall y)(\forall z)(xfy \ \land \ xfz \implies y = z).\]
+\end{defn}
+
+\begin{defn}
+For a function $f$ and an object $x$, we write $f(x) := y$ where $y$ satisfies
+\[((\exists! z)(xfz)\ \land\ xfy) \ \lor \ ((\nexists z)(xfz) \ \land \ y = \varnothing).\]
+\end{defn}
+
+\begin{defn}[Function Spaces]
+\label{defn:SetOfFunctions}
+Let $A$ and $B$ be sets. Then 
+\[\mathscr F(A, B) := \{f : f \text{ is a function} \ \land \ \mathrm{Dom}(f) = A \ \land \ \mathrm{Im}(f) \subseteq B\}.\]
+\end{defn}
+\begin{rem}
+By the \hyperref[axiom:separation]{axiom schema of separation} on the set $A \times B$, we establish the existence of the desired set of all functions from $A$ to $B$ similarly as in Theorem~\ref{thm:CartesianProductExistence}. The conventional notation for $f \in \mathscr F(A, B)$ is $f : A \to B$, but we will not be using that notation in this essay due to the confusions which may arise when working with sets of functions.
+\end{rem}
+
+\begin{defn}
+Let $A$ and $B$ be sets, and let $f \in \mathscr F(A, B)$. We say $f$ is \textit{injective} if and only if $f^T \in \mathscr F(B, A)$. Furthermore, we say $f$ is \textit{bijective} if and only if $f$ is injective and $\mathrm{Im}(f) = B$.
+\end{defn}
+
+Finally, with the notion of functions defined, we introduce the axiom of choice.
+
+\begin{axiom}[Axiom of Choice]
+\label{axiom:choice}
+Let $A$ be a set such that $(\forall x \in A)(x \text{ is a set} \ \land \ x\neq\varnothing)$. Then
+\[\left(\exists f \in \mathscr F\left(A,\ \bigcup A\right)\right)(\forall B\in A)(f(B) \in B).\]
+\end{axiom}
+
+\subsubsection{Well-Ordering}
+\begin{defn}
+\label{defn:wellorder}
+Let $A$ be a set, and let $R$ be a relation on $A \times A$.
+\begin{itemize}
+\item We say $R$ is \textit{asymmetric} in $A$ if and only if $(\forall x,y\in A)(xRy \implies \lnot(yRx))$.
+\item We say $R$ \textit{connects} $A$ if and only if $(\forall x,y\in A)(x\neq y \implies xRy \ \lor \ yRx)$.
+\item We say $x\in A$ is an \textit{$R$-least element of $A$} if and only if $(\forall y\in A)(x\neq y \implies xRy)$.
+\item We say \textit{$R$ well-orders $A$} if and only if $R$ is asymmetric in $A$ and connects $A$, and
+\[(\forall B)(B \subseteq A \ \land \ B \neq \varnothing \implies B \text{ has an }R\text{-least element}).\]
+\end{itemize}
+\end{defn}
+
+\begin{thm}
+\label{thm:wellorderingsubset}
+Let a relation $R$ well-order a set $A$, and let $B \subseteq A$. Then $R$ well-orders $B$.
+\end{thm}
+\begin{proof}
+If $B = \varnothing$ or $B = \{x\}$ for some $x\in A$, then $B$ is trivially well-ordered. So suppose $(\exists x,y\in A)(x\neq y \ \land \ x,y\in B)$.
+
+The asymmetry of $R$ in $B$ is carried over from the asymmetry of $R$ in $A$. For any $x,y\in B$ such that $x\neq y$, we have $x,y\in A$. Then $xRy \ \lor \ yRx$ since $R$ connects $A$, and so $R$ connects $B$. Now for any set $C$ such that $C \subseteq B \ \land \ C\neq\varnothing$, we have $C \subseteq A \ \land \ C\neq\varnothing$. Therefore $C$ has an $R$-least element.
+\end{proof}
+
+\begin{thm}
+\label{thm:uniqueleast}
+Let $A$ be a set such that $A\neq\varnothing$, and let a relation $R$ well-order $A$. Then $A$ has a unique $R$-least element.
+\end{thm}
+\begin{proof}
+Since $A \neq \varnothing$, the well-ordering of $A$ requires that $A$ has an $R$-least element. Now suppose $x,y\in A$ are both $R$-least elements of $A$ with $x\neq y$. Then $xRy$ and $yRx$. Now, if we consider the subset $A_{x,y} := \{x,y\}$ of $A$, by Theorem~\ref{thm:wellorderingsubset}, $R$ well-orders $A_{x,y}$. But $R$ being asymmetric in $A_{x,y}$ yields the contradiction $xRy\ \land\ yRx\ \land\ \lnot(xRy)\ \land\ \lnot(yRx)$.
+\end{proof}
+
+\pagebreak
+
+\section{Ordinal Numbers}
+\label{sec:OrdinalNumbers}
+The layman definition of an \textit{ordinal number} is a number defining a thing's position in a series, such as ``first'' or ``second'' \citep{Dictionary}. We will generalise this notion to infinity and beyond \citep{ToyStory}.
+
+For convenience, any set defined using Definitions~\ref{defn:class1}, \ref{defn:class2} or \ref{defn:class3} will henceforth be assumed to have a theorem justifying the existence of the desired set, like Theorem~\ref{thm:CartesianProductExistence}. For example, given a logical statement $\varphi(x)$ we will assume that the set $A := \{x : \varphi(x)\}$ satisfies $(\forall x)(x \in A \iff \varphi(x))$. Most of the content below come from Suppes 1960~\citep{SuppesBook}, with some changes as laid out by Jech 2003~\citep{JechBook} to follow modern convention.
+
+\subsection{The Structure of Ordinal Numbers}
+\begin{defn}[Transitive Sets]
+\label{defn:transitive}
+Let $A$ be a set. We say $A$ is \textit{transitive} if and only if
+\[(\forall x\in A)(x \text{ is a set}\ \land \ x\subset A).\]
+\end{defn}
+
+\begin{defn}
+Let $A$ be a set. We define the relation $\in_A$ on $A\times A$ by
+\[\in_A := \{(x,y) : x,y\in A \ \land \ x\in y\}.\]
+\end{defn}
+
+\begin{defn}[Ordinals]
+Let $\alpha$ be a set. We say $\alpha$ is an \textit{ordinal} (or an \textit{ordinal number}) if and only if $\alpha$ is transitive and $\in_\alpha$ connects $\alpha$.
+\end{defn}
+
+A consequence of this definition is all ordinals $\alpha$ are well-ordered by the $\in_\alpha$. Some texts define ordinals to be transitive and well-ordered, as in Jech 2003~\citep[p. 19]{JechBook}.
+\begin{lem}
+Let $\alpha$ be an ordinal. Then $\in_\alpha$ well-orders $\alpha$.
+\end{lem}
+\begin{proof}
+By definition, $\in_\alpha$ connects $\alpha$.
+
+Suppose we have $x,y\in\alpha$ such that $x\in_\alpha y$ and $y\in_\alpha x$. Then $x\in y$ and $y \in x$, contradicting Theorem~\ref{thm:AinBandBinA}. Hence $\in_\alpha$ is asymmetric in $\alpha$.
+
+Now suppose $A \subseteq  \alpha$ is such that $A\neq\varnothing$. By the \hyperref[axiom:regularity]{axiom of regularity} and the transitivity of $\alpha$,
+\[(\exists B\in A)(A \cap B = \varnothing),\]
+and hence $(\forall x\in A)(x\notin B)$. Then because $\in_\alpha$ connects $\alpha$, we must have $(\forall x\in A)(x\neq B \implies B\in x)$. Therefore $B$ is an $\in_\alpha$-least element of $A$.
+\end{proof}
+
+The simplest example of an ordinal would be $\varnothing$. We will use this fact to later define the ordinal number $0$ as $\varnothing$.
+\begin{lem}
+\label{lem:emptyordinal}
+The empty set is an ordinal.
+\end{lem}
+\begin{proof}
+We know that $(\forall x)(x\notin \varnothing)$. Therefore the statement ``$(x \text{ is a set}\ \land \ x\subset A)$'' in Definition~\ref{defn:transitive} trivially holds due to ``$x\in A$'' being a false statement, and so $\varnothing$ is transitive. A similar argument is used on Definition~\ref{defn:wellorder} to conclude that $\in_\varnothing$ connects $\varnothing$.
+\end{proof}
+
+Before introducing more examples of ordinals, we establish several theorems that reveal the structure of ordinals. We first show that every ordinal only consists of other ordinals.
+
+\begin{prop}
+\label{prop:ElementsOfOrdinalsAreOrdinals}
+Let $\alpha$ be an ordinal. Then $(\forall\beta\in\alpha)(\beta \text{ is an ordinal})$.
+\end{prop}
+\begin{proof}
+Let $\beta\in\alpha$. The transitivity of $\alpha$ yields $\beta\subset\alpha$. From Theorem~\ref{thm:wellorderingsubset} we know that $\in_\alpha$ well-orders $\beta$, so $\in_\alpha$ connects $\beta$ and every non-empty subset of $\beta$ has an $\in_\alpha$-least element. Since $\in_\alpha$ connects $\beta$, 
+\[(\forall x,y\in\beta)(x\neq y \implies x\in_\alpha y \ \lor \ y\in_\alpha x).\]
+Since $\beta \subset \alpha$, we may rewrite this as
+\[(\forall x,y\in\beta)(x\neq y \implies x\in_\beta y \ \lor \ y\in_\beta x),\]
+from which we conclude that $\in_\beta$ connects $\beta$.
+
+Now for any $x\in\beta$, the transitivity of $\alpha$ implies that $x$ is a set. Then for all $y \in x$, we have $y \in_\alpha x \in_\alpha \beta$, so we obtain $y\in_\alpha \beta$ because $\in_\alpha$ connects $\alpha$. Therefore $x\subset\beta$ and thus $\beta$ is transitive.
+\end{proof}
+
+We also have the following: for any ordinals $\alpha$ and $\beta$, we have $\alpha \in \beta$ if and only if $\alpha\subset\beta$. The forward implication is simply due to the transitivity of $\beta$. The converse of this statement is established below.
+
+\begin{prop}
+\label{prop:ordinalsubsetelement}
+Let $\alpha$ and $\beta$ be ordinals with $\alpha\subset\beta$. Then $\alpha\in\beta$.
+\end{prop}
+\begin{proof}
+The transitivity of $\alpha$ yields
+\[(\forall x)(\forall y)(x\in_\beta y \ \land \ y\in\alpha \implies x\in\alpha).\]
+Now, since $\alpha\subset\beta$,
+\[(\exists z\in \beta)(\alpha = \{x\in\beta : x\in_\beta z\})\]
+because $\in_\beta$ well-orders $\beta$ (and hence well-orders $\alpha$ by Theorem~\ref{thm:wellorderingsubset}). Then, since $\beta$ is transitive, this reduces to
+\[(\exists z\in \beta)(\alpha = \{x : x\in z\}).\]
+And thus we obtain $(\exists z\in\beta)(\alpha = z)$, giving us $\alpha\in\beta$.
+\end{proof}
+
+We can then establish the following important theorem: for any ordinals $\alpha$ and $\beta$, they are either equal or one must be a proper subset (and hence an element, by Proposition~\ref{prop:ordinalsubsetelement}) of the other.
+
+\begin{thm}
+\label{thm:ordinalsubsetofanother}
+Let $\alpha$ and $\beta$ be ordinals. Then $\alpha \subseteq \beta$ or $\beta \subseteq \alpha$.
+\end{thm}
+\begin{proof}
+Define $\gamma := \alpha \cap \beta$. Arguing similarly as in Proposition~\ref{prop:ElementsOfOrdinalsAreOrdinals}, we conclude that $\gamma$ is an ordinal.
+
+We will show that $\gamma = \alpha$ or $\gamma = \beta$, from which the theorem will follow. Suppose, for a contradiction, that $\gamma \subset \alpha$ and $\gamma \subset \beta$. Then $\gamma \in \alpha$ and $\gamma\in\beta$ by Proposition~\ref{prop:ordinalsubsetelement}, and so $\gamma\in\alpha\cap\beta=\gamma$, contradicting Theorem~\ref{thm:AinA}.
+\end{proof}
+
+We can now define the notion of an ordinal number being ``less than'' another ordinal number.
+
+\begin{defn}
+\label{defn:inequalities}
+Let $\alpha$ and $\beta$ be ordinals. We write
+\begin{itemize}
+\item $\alpha<\beta$ if and only if $\alpha\in\beta$,
+\item $\alpha\leq\beta$ if and only if $\alpha<\beta\ \lor \ \alpha=\beta$.
+\end{itemize}
+\end{defn}
+The notations $\alpha>\beta$ and $\alpha\geq\beta$ are defined similarly.
+
+Standard inequality results quickly follow. There is no ordinal $\alpha$ such that $\alpha < \varnothing$, due to Theorem~\ref{thm:EmptySetIsEmpty}. From Theorem~\ref{thm:AinA}, for any ordinal $\alpha$ we have $\lnot(\alpha < \alpha)$. Due to the transitive property of ordinals, we also have for any ordinals $\alpha,\beta,\gamma$, if $\alpha<\beta$ and $\beta<\gamma$ then $\alpha<\gamma$. Furthermore, Theorem~\ref{thm:ordinalsubsetofanother} allows us to have a ``law of trichotomy'' for ordinal numbers, i.e. for any ordinals $\alpha$ and $\beta$, exactly one of the following holds: $\alpha < \beta$, or $\alpha = \beta$, or $\alpha > \beta$.
+
+Putting all of the above together, we obtain the structure of all ordinals: as the set of all ordinals less than that ordinal.
+
+\begin{cor}
+Let $\alpha$ be an ordinal. Then
+\[\alpha = \{\beta : \beta \text{ is an ordinal}\ \land \ \beta<\alpha\}.\]
+\end{cor}
+
+With all ordinals following a very specific structure, it would be natural to assume that we can have a ``set of all ordinals''. However, as useful as it would be, the set of all ordinals does not exist.
+
+\begin{thm}
+\label{thm:NoOrdinalSet}
+There does not exist a set $V$ such that $(\forall x)(x\in V \iff x \text{ is an ordinal})$.
+\end{thm}
+\begin{proof}
+Suppose such a set $V$ exists. We will show that $V$ must be an ordinal, from which $V \in V$ follows, contradicting Theorem~\ref{thm:AinA}.
+
+From Theorem~\ref{thm:ordinalsubsetofanother}, any $\alpha,\beta\in V$ such that $\alpha\neq\beta$ have the property $\alpha \in \beta$ or $\beta\in\alpha$. Hence $\in_V$ connects $V$.
+
+Now suppose $\gamma\in V$. For any $\delta\in\gamma$, Proposition~\ref{prop:ElementsOfOrdinalsAreOrdinals} tells us that $\delta\in V$. Thus $\gamma \subset V$, which establishes the transitivity of $V$.
+\end{proof}
+
+\subsection{The Successor Operator}
+For any ordinal, we may think of its successor as the ``next immediate ordinal'', analogous to ``adding $1$ to a natural number''. In fact, the successor operator will be used in the definition of addition of ordinal numbers, and will have the property of ``adding $1$''.
+
+\begin{defn}[Successor Operator]
+Let $\alpha$ be an ordinal. Then the \textit{successor} of $\alpha$ is
+\[S(\alpha) := \alpha \cup \{\alpha\}.\]
+\end{defn}
+\begin{rem}
+The successor operator is not a function. Functions are defined as relations between sets (see Section~\ref{subsec:Func}). The successor operator is defined on all ordinals, and a set of all ordinals does not exist due to Theorem~\ref{thm:NoOrdinalSet}.
+\end{rem}
+
+We should expect that the successor of an ordinal $\alpha$ is also an ordinal. We observe that $S(\alpha) = \alpha \cup \{\alpha\} = \bigcup \{\beta : \beta \text{ is an ordinal}\ \land\ \beta\leq\alpha\}$, and so $S(\alpha)$ is a union of ordinals. Using the following theorem then shows that $S(\alpha)$ is an ordinal.
+
+\begin{prop}
+\label{prop:UnionOrdinals}
+Let $A$ be a set such that $(\forall x\in A)(x \text{ is an ordinal})$. Then $\bigcup A$ is an ordinal.
+\end{prop}
+\begin{proof}
+From Proposition~\ref{prop:ElementsOfOrdinalsAreOrdinals}, elements of ordinals are ordinals. So for any $\alpha, \beta\in\bigcup A$ we conclude that $\alpha$ and $\beta$ are ordinals. Thus if $\alpha\neq\beta$, then $\alpha\in\beta$ or $\beta\in\alpha$. Therefore $\in_{\bigcup A}$ connects $\bigcup A$.
+
+Now suppose $\gamma \in \bigcup A$. As above, $\gamma$ is an ordinal and is thus a set. Also, by definition, $(\exists \delta\in A)(\gamma\in\delta)$. Then, as $\delta$ is an ordinal, we have $\gamma\subset\delta$. We thus have
+\[\gamma\subset\delta\subseteq\bigcup A\]
+giving the desired $\gamma\subset\bigcup A$. Thus $\bigcup A$ is transitive.
+\end{proof}
+
+\begin{cor}
+Let $\alpha$ be an ordinal. Then $\bigcup\alpha \leq \alpha$.
+\end{cor}
+
+Definition~\ref{defn:inequalities} yields the intuitively obvious $\alpha < S(\alpha)$ for any ordinal $\alpha$. We also expect the successor operator to have the property that there is no ordinal between $\alpha$ and $S(\alpha)$.
+
+\begin{thm}
+Let $\alpha$ be an ordinal. Then
+\[(\nexists \beta)(\beta \text{ is an ordinal}\ \land \ \alpha<\beta<S(\alpha)).\]
+\end{thm}
+\begin{proof}
+Suppose, for a contradiction, such a $\beta$ exists. Then we have 
+\[\alpha \subset \beta \subset S(\alpha) = \alpha \cup \{\alpha\}\]
+and so $(\exists x,y\in S(\alpha)\setminus\alpha)(x\in\beta\ \land \ y\notin\beta)$. However as $x,y\in S(\alpha)\setminus\alpha$, we require $x,y\in\{\alpha\}$ and thus $x=y=\alpha$, contradicting $(x\in\beta \ \land \ y\notin\beta)$.
+\end{proof}
+\begin{cor}
+Let $\alpha$ be an ordinal. Then $\bigcup S(\alpha) = \alpha$.
+\end{cor}
+
+We also have the ``cancellation law'' for the successor operator.
+
+\begin{prop}
+Let $\alpha$ and $\beta$ be ordinals. If $S(\alpha) = S(\beta)$ then $\alpha = \beta$.
+\end{prop}
+\begin{proof}
+Suppose $S(\alpha)=S(\beta)$. For any $\gamma\in\alpha$ we have $\gamma < S(\alpha)$, and so $\gamma < S(\beta)$. This gives $\gamma \leq \beta$. Suppose, for a contradiction, that $\gamma = \beta$. Then $S(\gamma) = S(\beta) = S(\alpha)$, contradicting the fact that $\gamma < \alpha < S(\alpha)$ (which requires $S(\gamma) < S(\alpha)$). Therefore $\gamma < \beta$, and hence $\alpha\subseteq\beta$. Similarly, we can establish that $\beta\subseteq\alpha$.
+\end{proof}
+
+While we can ``cancel'' a successor operator as above, we cannot necessarily apply the inverse of the successor operator onto ordinals. More concretely, there are some ordinals which do not have predecessors. The ordinal $\varnothing$ is a trivial example. A more interesting example is infinity, which we will soon formalise. We will introduce such examples properly when we define ordinal arithmetic later.
+
+\begin{defn}[Limit Ordinals]
+An ordinal $\alpha$ is a \textit{limit ordinal} if and only if $\alpha\neq\varnothing$ and 
+\[(\nexists \beta)(\beta \text{ is an ordinal}\ \land \ S(\beta) = \alpha).\]
+\end{defn}
+
+\begin{lem}
+\label{lem:LimitOrdinalUnion}
+Let $\alpha$ be a limit ordinal. Then $\bigcup \alpha = \alpha$.
+\end{lem}
+\begin{proof}
+We already know that $\bigcup \alpha \leq \alpha$. Now for any ordinal $\beta < \alpha$, since $\alpha$ is a limit ordinal, we have $\lnot(S(\beta) = \alpha)$ and hence $S(\beta) < \alpha$. Therefore
+\[\beta \in S(\beta) \subset \bigcup \{\gamma:\gamma\text{ is an ordinal}\ \land\ \gamma<\alpha\} = \bigcup\alpha,\]
+which gives us $\alpha \leq \bigcup\alpha$.
+\end{proof}
+
+\subsection{Natural Numbers}
+Natural numbers are simply the finite ordinals, driven by the idea that a finite ordinal should have an ``end''. Since all ordinals $\alpha$ are well-ordered by $\in_\alpha$, all finite ordinals $\alpha$ should be well-ordered by $\in_\alpha^T$. Intuitively they have an ``$\in_\alpha$-greatest element'', and we can ``count backwards'' from a finite ordinal $\alpha$ down to $\varnothing$.
+
+\begin{defn}[Natural Numbers]
+Let $n$ be an ordinal number. We say $n$ is a \textit{natural number} (or \textit{finite ordinal}) if and only if $\in_n^T$ well-orders $n$.
+\end{defn}
+
+Using a similar argument to Lemma~\ref{lem:emptyordinal}, we can show that $\varnothing$ is a natural number. The following theorems then allow us to build up all the natural numbers.
+
+\begin{prop}
+\label{prop:SuccessorOfNaturalIsNatural}
+Let $n$ be a natural number. Then $S(n)$ is a natural number.
+\end{prop}
+\begin{proof}
+We already know $S(n)$ is an ordinal, hence $\in_{S(n)}$ connects $S(n)$ and thus $\in_{S(n)}^T$ connects $S(n)$. 
+
+Now suppose a set $B$ is such that $B\subseteq S(n)$ and $B\neq\varnothing$. If $n\notin B$ then $B\subseteq n$, and so $B$ has an $\in_{n}^T$-least element because $n$ is a natural number. Then since $n\subset S(n)$, this $\in_n$-least element is also an $\in_{S(n)}^T$-least element of $B$. On the other hand, if $n\in B$ then $(\forall x \in B)(x\neq n \implies x\in_{S(n)} n)$ and so $n$ is the $\in_{S(n)}^T$-least element of $B$.
+\end{proof}
+
+\begin{prop}
+\label{prop:SmallerThanNaturalIsNatural}
+Let $n$ be a natural number, and suppose $m$ is an ordinal such that $m < n$. Then $m$ is a natural number.
+\end{prop}
+\begin{proof}
+Theorem~\ref{thm:wellorderingsubset} implies $\in_n^T$ well-orders $m$. Then, since $m \subset n$, we conclude that $\in_m^T$ well-orders $m$.
+\end{proof}
+
+\begin{prop}
+\label{prop:NaturalAreSuccessorsOfNatural}
+Let $n$ be a natural number such that $n \neq \varnothing$. Then $n = S(m)$ for some natural number $m$.
+\end{prop}
+\begin{proof}
+We already know that $\bigcup n \leq n$, so $\bigcup n$ is a natural number by Proposition~\ref{prop:SmallerThanNaturalIsNatural}. We will show that $\bigcup n < n$, so $n$ is not a limit ordinal by Lemma~\ref{lem:LimitOrdinalUnion} and hence $S(\bigcup n) = n$.
+
+Let $m$ be the $\in_n^T$-least element of $n$, so $(\forall x \in n)(x \neq m \implies x \in m)$. The transitivity of $m$ then yields $(\forall x \in n)(x \neq m \implies x \subset m)$, hence we conclude that $m = \bigcup n$. Therefore $\bigcup n \in n$ as desired.
+\end{proof}
+\begin{rem}
+This shows that all natural numbers are not limit ordinals, and all limit ordinals are not natural numbers.
+\end{rem}
+
+Putting together Propositions~\ref{prop:SuccessorOfNaturalIsNatural},
+\ref{prop:SmallerThanNaturalIsNatural}, and~\ref{prop:NaturalAreSuccessorsOfNatural} allows us to conclude that all the natural numbers form a long chain of ordinals connected by the successor operator $S$, and that there are no breaks in the chain. We can thus define the familiar natural numbers as follows.
+\begin{defn}
+We define the natural numbers $0,1,2,3,\dots$ as follows:
+\[0 := \varnothing, \quad 1:= S(0), \quad 2:= S(1), \quad 3 := S(2), \quad \cdots.\]
+\end{defn}
+
+It is also convenient to have the set $\omega$ of all natural numbers, whose existence can be proven by using the \hyperref[axiom:separation]{axiom schema of separation} on the set obtained from the \hyperref[axiom:infinity]{axiom of infinity}.
+\begin{defn}
+We define the set of all natural numbers as $\omega := \{n : n \text{ is a natural number}\}$.
+\end{defn}
+\begin{rem}
+It is clear that $\omega$ is an ordinal. In fact, $\omega$ is a limit ordinal. This is because if $S(\alpha) = \omega$ for some ordinal $\alpha$ then $\alpha < \omega$, and so $\alpha \in \omega$, meaning $\alpha$ is a natural number. But then Proposition~\ref{prop:SuccessorOfNaturalIsNatural} implies that $\omega$ is a natural number, and hence $\omega \in \omega$, contradicting Theorem~\ref{thm:AinA}. As a consequence, we conclude that $\omega$ is not a natural number. We call ordinals which are not natural numbers \textit{transfinite ordinals}.
+\end{rem}
+
+\pagebreak
+
+\section{Using Ordinal Numbers}
+Now that we have developed ordinal numbers, we will see some of their applications in mathematics. We will develop the required tools to define arithmetic operations like addition by a recursion scheme. For example, we intend evaluate $3+2$ as follows: 
+\[3+2 = 3+(1+1) = (3+1)+1 = 4+1 = 5.\]
+We will then see how ordinal numbers can be used to produce two startling results --- the well-ordering theorem and Goodstein's theorem.
+
+To avoid the repetition of the predicate ``is an ordinal'', we will use lower case Greek letters ($\alpha,\beta,\gamma,\dots$) to denote ordinals.
+
+\subsection{Transfinite Induction and Transfinite Recursion}
+We begin by proving the principle of transfinite induction, which is a mathematical induction technique for statements about ordinal numbers. We provide several formulations of transfinite induction, as found in Suppes 1960~\citep[pp. 195--197]{SuppesBook}, each with their own quirk.
+
+The first formulation of transfinite induction is most commonly used~\citep[pp. 205--224]{SuppesBook}. It consists of three parts: a base case, a weak inductive step, and a strong inductive step for limit ordinals.
+\begin{thm}[Transfinite Induction: Formulation 1]
+\label{thm:Tinduction1}
+Let $\varphi(x)$ be a logical statement depending on the variable $x$, and suppose
+\begin{itemize}
+\item $\varphi(0)$ is true,
+\item $(\forall\alpha)(\varphi(\alpha)\implies\varphi(S(\alpha)))$, and
+\item for all limit ordinals $\alpha$, we have $(\forall\beta<\alpha)(\varphi(\beta)) \implies \varphi(\alpha)$.
+\end{itemize}
+Then $(\forall\alpha)(\varphi(\alpha))$.
+\end{thm}
+\begin{proof}
+Suppose, for a contradiction, $(\exists\alpha)(\lnot\varphi(\alpha))$. Define
+\[L_\alpha := \{\beta\in S(\alpha): \lnot\varphi(\beta)\}.\]
+Observe that $\varnothing \neq L_\alpha \subseteq S(\alpha)$. Hence, by Theorem~\ref{thm:wellorderingsubset}, $\in_{S(\alpha)}$ well-orders $L_\alpha$ and so by Theorem~\ref{thm:uniqueleast} there is a unique $\in_{S(\alpha)}$-least element of $L_\alpha$ by Theorem~\ref{thm:uniqueleast}. Let $\beta_*$ be the $\in_{S(\alpha)}$-least element of $L_\alpha$.
+
+Suppose $\beta_*$ is not a limit ordinal. If $\beta=0$ then this contradicts the first part of the hypothesis. So we must have $(\exists\gamma)(S(\gamma)=\beta_*)$. But now, due to $\beta_*$ being the least element, we have $\varphi(\gamma)$. Therefore the second part of the hypothesis yields $\varphi(\beta_*)$, contradicting the definition of $\beta_*$. 
+
+On the other hand, if $\beta_*$ is a limit ordinal, then for all ordinals $\delta<\beta_*$ we also have $\varphi(\delta)$. The third part of the hypothesis then yields $\varphi(\beta_*)$, also contradicting the definition of $\beta_*$.
+\end{proof}
+
+The second formulation of transfinite induction is analogous to regular strong induction for natural numbers. That is, if we can perform the strong inductive step for any ordinal, then the inductive hypothesis holds for all ordinals. Its proof is identical to the proof for the limit ordinal case in the first formulation.
+
+\begin{thm}[Transfinite Induction: Formulation 2]
+\label{thm:Tinduction2}
+Let $\varphi(x)$ be a logical statement depending on the variable $x$, and suppose
+\[(\forall\alpha)((\forall\beta<\alpha)(\varphi(\beta)) \implies \varphi(\alpha)).\]
+Then $(\forall\alpha)(\varphi(\alpha))$.
+\end{thm}
+
+The third formulation of transfinite induction is also similar to strong induction for natural numbers, however this time there is an ``upper limit'' to our inductive conclusion. This is useful because we can ``stop'' the induction once we reach a certain ordinal $\alpha$, and the inductive hypothesis will be true for all ordinals $\beta<\alpha$. While this formulation is written in terms of sets instead of logical statements, the proof is similar to the limit ordinal case of the first formulation.
+
+\begin{thm}[Transfinite Induction: Formulation 3]
+\label{thm:Tinduction3}
+Let $A$ be a set, let $\alpha$ be an ordinal, and suppose
+\[(\forall \beta<\alpha)(\beta\subseteq A \implies \beta\in A).\]
+Then $\alpha\subseteq A$.
+\end{thm}
+
+We now introduce transfinite recursion, with which we will define ordinal arithmetic operations. As with transfinite induction, we will provide several formulations of transfinite recursion as found in Suppes 1960~\citep[pp. 202--205]{SuppesBook}. We start with the first formulation, which recursively adds new mappings to a function based on the current function.
+
+\begin{thm}[Transfinite Recursion: Formulation 1]
+\label{thm:Trecursion1}
+Let $\tau(x)$ be a term depending on the variable $x$, and let $\alpha$ be an ordinal. Then there exists a unique function $F$ with $\mathrm{Dom}(F) = \alpha$ satisfying
+\[(\forall\beta<\alpha)(F(\beta) = \tau(F|_\beta)).\]
+\end{thm}
+\begin{proof}
+For an ordinal $\beta < S(\alpha)$, define the logical statement $\varphi(\beta,f)$ to be true if and only if $f$ is a function with $\mathrm{Dom}(f) = \beta$ satisfying
+\[(\forall \gamma < \beta)(f(\gamma) = \tau(f|_\gamma)).\]
+Suppose $\varphi(\beta,f)$ and $\varphi(\beta,g)$ are both true, we will show by transfinite induction that $f=g$. Take $A := \{x \in \beta : f(x) = g(x)\}$, and suppose inductively that for any ordinal $\gamma < \beta$ we have $\gamma\subseteq A$. Then $f|_\gamma = g|_\gamma$ by the inductive hypothesis, and thus
+\[f(\gamma) = \tau(f|_\gamma) = \tau(g|_\gamma) = g(\gamma),\]
+giving us $\gamma\in A$. The \hyperref[thm:Tinduction3]{third formulation of transfinite induction} then yields $\beta\subseteq A$, and so we conclude $f = g$.
+
+The above shows that $\varphi$ satisfies the hypothesis of the \hyperref[axiom:replacement]{axiom schema of replacement}, so the axiom yields
+\[(\exists B)(f\in B \iff (\exists\beta<S(\alpha))(\varphi(\beta,f))).\]
+
+A corollary of the transfinite induction above is that for all $f,g\in B$, we have $f\subseteq g$ or $g\subseteq f$. Thus if we define $F := \bigcup B$, then $F$ is a function with the property $(\forall\beta\in\mathrm{Dom}(F))(F(\beta) = \tau(F|_\beta))$.
+
+Now define $L_\alpha := \{\beta\in\alpha : \beta\notin\mathrm{Dom}(F)\}$ and suppose, for a contradiction, that $L_\alpha$ is non-empty. Then, letting $\beta_*$ be the $\in_\alpha$-least element of $L_\alpha$, there must be a function in $B$ with the desired recursion property for all ordinals less than $\beta_*$, i.e.
+\[(\exists f\in B)(\mathrm{Dom}(f) = \beta_*).\]
+But then $f \cup (\beta_*, \tau(f)) \in B$, which gives the contradiction $\beta_* \in \mathrm{Dom}(F)$.
+
+Therefore the function $F := \bigcup B$ satisfies the desired properties, proving the existence claim of the theorem. The uniqueness claim is then proven using \hyperref[thm:Tinduction3]{third formulation of transfinite induction} similarly as above.
+\end{proof}
+
+The second formulation of transfinite recursion will recursively use the actual values of the function evaluated at smaller ordinals to define new mappings. The idea is to replace $F(\beta) = \tau(F|_\beta)$ with $F(S(\beta)) = \tau(F(\beta))$ in the \hyperref[thm:Trecursion1]{first formulation}. However, we must then create a separate case for limit ordinals in our recursive scheme.
+
+\begin{thm}[Transfinite Recursion: Formulation 2]
+\label{thm:Trecursion2}
+Let $\tau(x)$ be a term depending on the variable $x$, let $x_0$ be any object, and let $\alpha \neq \varnothing$ be an ordinal. Then there exists a unique function $F$ with $\mathrm{Dom}(F) = \alpha$ satisfying
+\begin{itemize}
+\item $F(0) = x_0$,
+\item for all ordinals $\beta$ with $S(\beta) < \alpha$,
+\[F(S(\beta)) = \tau(F(\beta)),\]
+\item for all limit ordinals $\beta$ with $\beta<\alpha$, 
+\[F(\beta) = \bigcup_{\gamma<\beta} F(\gamma).\]
+\end{itemize}
+\end{thm}
+\begin{proof}
+Define the function $f_\tau$ by 
+\[f_\tau := \{(\beta,\tau(\beta)) : \beta < \alpha\},\]
+and let $I := \mathrm{Im}(f_\tau)$. Then define the term $\sigma(x)$ by
+\[
+\sigma(x) := \begin{cases}
+x_0 \quad &\text{if } x = 0,\\
+\tau(x(\beta)) \quad &\text{if } \beta<\alpha \text{ and } x \in \mathscr F(S(\beta), I),\\
+\bigcup_{\gamma<\beta} x(\gamma) \quad &\text{if } \beta \text{ is a limit ordinal, } \beta < \alpha, \text{ and } x \in \mathscr F(\beta, I), \\
+\varnothing \quad &\text{otherwise}.
+\end{cases}
+\]
+Then, by the \hyperref[thm:Trecursion1]{first formulation of transfinite recursion}, there exists a unique function $F$ with $\mathrm{Dom}(F) = \alpha$ satisfying
+\[(\forall\beta<\alpha)(F(\beta) = \sigma(F|_\beta)).\]
+Now, note that for all ordinals $\beta<\alpha$, $F|_\beta \in \mathscr F(\beta, I)$. Hence
+\begin{itemize}
+\item $F(0) = \sigma(F|_0) = x_0$,
+\item for all ordinals $\beta$ with $S(\beta) < \alpha$
+\[F(S(\beta)) = \sigma\left(F|_{S(\beta)}\right) = \tau\left(F|_{S(\beta)}(\beta)\right) = \tau(F(\beta)),\]
+\item for all limit ordinals $\beta$ with $\beta < \alpha$,
+\[F(\beta) = \sigma(F|_\beta) = \bigcup_{\gamma<\beta} F|_{\beta}(\gamma) = \bigcup_{\gamma<\beta} F(\gamma).\]
+\end{itemize}
+Thus $F$ has the desired properties, proving the existence claim of the theorem. 
+
+We now use the \hyperref[thm:Tinduction1]{first formulation of transfinite induction} to prove the uniqueness claim. Suppose $F$ and $G$ are two functions with the desired properties. The base case of the induction holds because of the requirement $F(0) = G(0) = x_0$. Now suppose for all $\beta < \alpha$ we have $F(\beta) = G(\beta)$. Then, if $S(\beta) < \alpha$ (otherwise the weak inductive step vacuously holds), we have
+\[F(S(\beta)) = \tau(F(\beta)) = \tau(G(\beta)) = G(S(\beta)).\]
+Finally suppose for all limit ordinals $\beta < \alpha$ we have 
+\[(\forall\gamma<\beta)(F(\gamma) = G(\gamma)).\]
+Then
+\[F(\beta) = \bigcup_{\gamma<\beta} F(\gamma) = \bigcup_{\gamma<\beta} G(\gamma) = G(\beta).\]
+Thus \hyperref[thm:Tinduction1]{transfinite induction} yields $F = G$.
+\end{proof}
+
+We should expect that the function $F$ obtained from the \hyperref[thm:Trecursion2]{second formulation of transfinite recursion} is ``independent'' of the choice of the domain $\alpha$. If we obtain functions $F_1$ and $F_2$ with different ordinal domains but the same term $\tau(x)$, then we should expect $F_1(\beta) = F_2(\beta)$ for all $\beta$ that is in both domains. \hyperref[thm:Tinduction1]{Transfinite induction} easily affirms this.
+
+\begin{cor}
+Let $\tau(x)$ be a term depending on the variable $x$, and let $\alpha_1$ and $\alpha_2$ be ordinals. Suppose we obtain functions $F_1$ and $F_2$ from the \hyperref[thm:Trecursion2]{second formulation of transfinite recursion} on $\alpha_1$ and $\alpha_2$ respectively, but both using the same term $\tau(x)$ and starting object $x_0$. Then for all $\beta < \alpha_1 \cap \alpha_2$, we have $F_1(\beta) = F_2(\beta)$.
+\end{cor}
+
+On the basis of this corollary and the \hyperref[thm:Trecursion2]{second formulation of transfinite recursion}, we obtain the following third formulation of transfinite recursion which we will subsequently use for all definitions of ordinal arithmetic operations. The reason this formulation uses terms instead of functions is because terms can be defined for all ordinals despite the set of all ordinals not existing, thus we would be allowed to define arithmetic operations on all ordinals.
+
+\begin{thm}[Transfinite Recursion: Formulation 3]
+\label{thm:Trecursion3}
+Let $\sigma(\alpha_1,\dots,\alpha_n)$ and $\mu(\alpha_0,\alpha_1,\dots,\alpha_n)$ be terms depending on the ordinal variables $\alpha_1,\dots,\alpha_n$ and $\alpha_0,\alpha_1,\dots,\alpha_n$ respectively. Then the following definition of the term $\tau(\alpha_0,\alpha_1,\dots,\alpha_n)$ is well-defined:
+\begin{itemize}
+\item $\tau(0,\alpha_1,\dots,\alpha_n) := \sigma(\alpha_1,\dots,\alpha_n)$,
+\item for all ordinals $\beta$,
+\[\tau(S(\beta),\alpha_1,\dots,\alpha_n) := \mu(\tau(\beta,\alpha_1,\dots,\alpha_n), \alpha_1,\dots,\alpha_n),\]
+\item for all limit ordinals $\beta$,
+\[\tau(\beta,\alpha_1,\dots,\alpha_n) := \bigcup_{\gamma<\beta}\tau(\gamma,\alpha_1,\dots,\alpha_n).\]
+\end{itemize}
+\end{thm}
+
+\subsection{Well-Ordering Theorem}
+We can generalise the \hyperref[thm:Tinduction3]{third formulation of transfinite induction} to any well-ordered set, obtaining a general ``strong principle of induction''.
+\begin{thm}[Strong Principle of Mathematical Induction]
+\label{thm:StrongInduction}
+Let $A$ and B be sets, let $R$ be a relation which well-orders $B$, and suppose that
+\[(\forall y\in B)((\forall x\in B)(xRy \implies x \in A) \implies y \in A).\]
+Then $B \subseteq A$.
+\end{thm}
+
+A consequence of the \hyperref[axiom:choice]{axiom of choice} is the \hyperref[thm:WellOrderingTheorem]{well-ordering theorem}, which states that every set can be well-ordered. In fact, the well-ordering theorem is equivalent to the axiom of choice \citep[pp. 243 -- 251]{JechBook}. In conjunction with the \hyperref[thm:StrongInduction]{strong principle of mathematical induction}, this shows that it is theoretically possible to perform strong induction on any set. That being said, such a relation may be incredibly difficult (or even impossible \citep{NoWellOrderReals}) to explicitly construct within our framework, or be impractical to perform induction with. The following proof is adapted from both Jech 2003~\citep[p. 48]{JechBook} and Suppes 1960~\citep[pp. 241 -- 242]{SuppesBook}.
+
+\begin{thm}[Well-Ordering Theorem]
+\label{thm:WellOrderingTheorem}
+For any set $A$, there exists a relation $R$ on $A \times A$ which well-orders $A$.
+\end{thm}
+\begin{proof}
+We will show that there exists an ordinal $\alpha$ and a function $f \in \mathscr F(\alpha, A)$ which is bijective, from which the theorem easily follows.
+
+We already know that $\varnothing$ is an ordinal, from Lemma~\ref{lem:emptyordinal}. Thus $\varnothing$ is well-ordered by $\in_\varnothing$. So let us assume that $A \neq \varnothing$. 
+
+Let $A_S := \mathscr P(A) \setminus \{\varnothing\}$ be the set of all non-empty subsets of $A$.
+Due to the \hyperref[axiom:choice]{axiom of choice}, there exists a function $g \in \mathscr F(A_S, \bigcup A_S)$ such that 
+\[(\forall B \in A_S)(g(B) \in B).\]
+Note that $\bigcup A_S = A$. 
+
+Now define the logical statement $\varphi(B,\beta)$ to be true if and only if $\beta$ is an ordinal, $B \in A_S$, and
+\[\left(\exists h \in \mathscr F(\beta, B)\right)(h \text{ is bijective} \ \land \ (\forall \gamma < \beta)(h(\gamma) = g(A \setminus \mathrm{Im}(h|_\gamma)))).\]
+If $\varphi(B,\beta)$ is true, and so such a function $h$ exists, the \hyperref[thm:Trecursion1]{first formulation of transfinite recursion} says this $h$ must be unique. Furthermore, notice that $h(0) = g(A)$. Together with the bijective requirement in $\varphi$, this yields
+\[(\forall B\in A_S)(\forall \beta_1)(\forall \beta_2)(\varphi(B, \beta_1) \ \land \ \varphi(B,\beta_2) \implies \beta_1 = \beta_2).\]
+Hence from the \hyperref[axiom:replacement]{axiom schema of replacement},
+\[(\exists C)(\forall \beta)(\beta \in C \iff (\exists B \in A_S)(\varphi(B,\beta))).\]
+
+Now define $\alpha := \bigcup C$. We know that $\alpha$ is an ordinal, due to Proposition~\ref{prop:UnionOrdinals}. Consider the function $f \in \mathscr F(\alpha, A)$ constructed using the \hyperref[thm:Trecursion1]{first formulation of transfinite recursion} with the recursion scheme
+\[(\forall \delta < \alpha)(f(\delta) = g(A \setminus \mathrm{Im}(f|_\delta))).\]
+We will show that $f$ is the desired bijection. 
+
+To show that $f$ is injective, we proceed by the \hyperref[thm:Tinduction3]{third formulation of transfinite induction}. Let
+\[I_f := \{\delta\in\alpha : (\nexists \varepsilon\in\alpha)(\varepsilon \neq \delta \ \land \ f(\delta) = f(\varepsilon))\}.\]
+Suppose inductively that for all $\delta < \alpha$ we have $\delta \subseteq I_f$. Now for any $\varepsilon$ such that $\delta < \varepsilon < \alpha$, we know that $f(\delta) \in \mathrm{Im}(f|_\varepsilon)$. Hence \[f(\varepsilon) = g(A\setminus\mathrm{Im}(f|_\varepsilon)) \in A\setminus\mathrm{Im}(f|_\varepsilon) \subseteq A\setminus\{f(\delta)\}.\]
+Thus $f(\varepsilon) \neq f(\delta)$, giving us $\delta \in I_f$. Therefore \hyperref[thm:Tinduction3]{transfinite induction} yields $\alpha \subseteq I_f$, and so we conclude $f$ is injective.
+
+Finally, we show that $\mathrm{Im}(f) = A$. Suppose, for a contradiction, that $A\setminus\mathrm{Im}(f) \neq \varnothing$. Then $(\exists x \in A)(g(A\setminus\mathrm{Im}(f)) = x)$. Now define the function $f' :=  f \cup \{(\alpha, x)\} \in \mathscr F(S(\alpha),A)$. Clearly $f'$, as a function in $\mathscr F(S(\alpha),\mathrm{Im}(f'))$, is bijective. Hence $\varphi(\mathrm{Im}(f'), S(\alpha))$ is true, and thus $S(\alpha) \in C$. However, since $\alpha = \bigcup C$, we obtain the absurd result $S(\alpha) \subseteq \alpha$.
+
+We thus conclude that $f$ is bijective. It is then clear that the relation $R$ defined by 
+\[R := \{(f(\delta), f(\varepsilon)) : \delta < \varepsilon < \alpha\}\]
+well-orders $A$.
+\end{proof}
+
+\subsection{Basic Ordinal Arithmetic}
+Equipped with \hyperref[thm:Trecursion3]{third formulation of transfinite recursion}, we can now define the familiar basic arithmetic operations for ordinal numbers.
+
+\begin{defn}[Addition]
+\label{defn:addition}
+For all ordinals $\alpha$,
+\begin{itemize}
+\item $\alpha + 0 := \alpha$,
+\item for all ordinals $\beta$, 
+\[\alpha + S(\beta) := S(\alpha + \beta),\]
+\item for all limit ordinals $\beta$, 
+\[\alpha + \beta := \bigcup_{\gamma<\beta}(\alpha + \gamma).\]
+\end{itemize}
+\end{defn}
+
+\begin{defn}[Multiplication]
+\label{defn:multiplication}
+For all ordinals $\alpha$,
+\begin{itemize}
+\item $\alpha \cdot 0 := 0$,
+\item for all ordinals $\beta$,
+\[\alpha \cdot S(\beta) := \alpha \cdot \beta + \alpha,\]
+\item for all limit ordinals $\beta$, 
+\[\alpha \cdot \beta := \bigcup_{\gamma<\beta} (\alpha \cdot \gamma).\]
+\end{itemize}
+\end{defn}
+\begin{rem}
+We will adopt the convention $\alpha\beta := \alpha \cdot \beta$.
+\end{rem}
+
+\begin{defn}[Exponentiation]
+For all ordinals $\alpha$,
+\begin{itemize}
+\item $\alpha^0 := 1$,
+\item for all ordinals $\beta$,
+\[\alpha^{S(\beta)} := \alpha^\beta \cdot \alpha,\]
+\item for all limit ordinals $\beta$, 
+\[\alpha^\beta := \bigcup_{\gamma<\beta} (\alpha^\gamma).\]
+\end{itemize}
+\end{defn}
+
+If we restrict ourselves to natural numbers, we have all the usual arithmetic results for natural numbers. In particular, we may derive the Peano axioms~\citep[pp. 135--150]{SuppesBook}~\cite[pp. 27--70]{Peano}. However, the story is different when we bring transfinite ordinals into the equation. For the complete development of ordinal arithmetic, we defer to Bachmann 1955~\citep{BachmannTransfinite}. Several interesting ordinal arithmetic results are listed below, and are found in Suppes 1960~\citep[pp. 205--224]{SuppesBook} and Jech 2003~\citep[pp. 23--24]{JechBook}. We will omit their proofs, as most of them are simply proofs using the \hyperref[thm:Tinduction1]{first formulation of transfinite induction}.
+
+\begin{lem}
+Let $\alpha$ be an ordinal. Then $0 + \alpha = \alpha$ and $0 \cdot \alpha = 0$.
+\end{lem}
+\begin{rem}
+Combined with the Definitions~\ref{defn:addition} and \ref{defn:multiplication}, we have $0 + \alpha = \alpha + 0 = \alpha$ and $0 \cdot \alpha = \alpha \cdot 0 = 0$ for all ordinals $\alpha$.
+\end{rem}
+
+\begin{lem}
+Let $\alpha$, $\beta$, and $\gamma$ be ordinals. Then $(\alpha + \beta) + \gamma = \alpha + (\beta + \gamma)$ and $(\alpha\beta)\gamma = \alpha(\beta\gamma)$. Furthermore, if $\beta < \gamma$ then $\alpha + \beta < \alpha + \gamma$ and $\alpha\beta < \alpha\gamma$.
+\end{lem}
+
+\begin{lem}
+\label{lem:OrdinalNotCommutative}
+Let $n$ be a natural number. Then $n + \omega = \omega$. Furthermore, if $n > 0$ then $n\omega = \omega$.
+\end{lem}
+\begin{rem}
+From Definition~\ref{defn:addition}, we obtain $\omega + 1 = S(\omega)$. Thus we have the intriguing result $1 + \omega = \omega < \omega + 1$. Also, from Definitions~\ref{defn:multiplication} and \ref{defn:addition}, we obtain $\omega\cdot 2 = \omega + \omega = \bigcup_{\gamma<\omega}(\omega + \gamma)$. Since $\omega \in \omega + 1$ we obtain $\omega \in \omega \cdot 2$. Thus we also have the intriguing result $2\cdot\omega = \omega < \omega\cdot 2$. This shows that ordinal addition and multiplication is not commutative.
+\end{rem}
+
+\begin{lem}
+Let $\alpha$, $\beta$, and $\gamma$ be ordinals. If $\alpha + \beta = \alpha + \gamma$ then $\beta = \gamma$. Furthermore, if $\alpha > 0$ and $\alpha\beta = \alpha\gamma$ then $\beta = \gamma$.
+\end{lem}
+\begin{rem}
+We can thus ``cancel'' addition and multiplication from the left, but not from the right due to Lemma~\ref{lem:OrdinalNotCommutative}.
+\end{rem}
+
+\begin{lem}
+Let $\alpha$, $\beta$, and $\gamma$ be ordinals. Then $\alpha(\beta+\gamma) = \alpha\beta + \alpha\gamma$.
+\end{lem}
+\begin{rem}
+This gives us the distributive law on the left. However, the distributive law on the right does not hold, since we know that $(1+1)\omega = 2\omega = \omega < \omega + \omega$.
+\end{rem}
+
+\begin{lem}
+\label{lem:OrdinalDivision}
+Let $\alpha$ and $\beta$ be ordinals with $\beta > 0$. Then there exist unique ordinals $\gamma$ and $\delta$ such that $\delta < \beta$ and $\alpha = \beta\gamma + \delta$.
+\end{lem}
+
+\begin{lem}
+Let $\alpha$, $\beta$, and $\gamma$ be ordinals. Then $\alpha^\beta \alpha^\gamma = \alpha^{\beta + \gamma}$ and $(\alpha^\beta)^\gamma = \alpha^{\beta\gamma}$. Furthermore, if $\alpha > 1$ and $\beta < \gamma$ then $\alpha^\beta < \alpha^\gamma$.
+\end{lem}
+
+We shall henceforth assume results from Peano and ordinal arithmetic, including the development of subtraction for natural numbers. The main result for this section is the following theorem, which states every ordinal number can be uniquely represented as a finite sum of multiples of powers of $\omega$. The following proof is adapted from Jech 2003~\citep[p. 24]{JechBook}.
+
+\begin{thm}[Cantor Normal Form]
+\label{thm:CantorNormalForm}
+Let $\alpha$ be an ordinal with $\alpha > 0$. Then there exist a unique natural number $k$, unique natural numbers $n_1,\dots, n_k$, and unique ordinals $\beta_1,\dots,\beta_k$ such that 
+\begin{itemize}
+\item $k \geq 1$,
+\item $n_1, \dots, n_k > 0$,
+\item $\alpha \geq \beta_1 > \dots > \beta_k$, and
+\item $\alpha = \omega^{\beta_1}n_1 + \dots + \omega^{\beta_k}n_k$.
+\end{itemize}
+\end{thm}
+\begin{rem}
+We call $\omega^{\beta_1}n_1 + \dots + \omega^{\beta_k}n_k$ the \textit{Cantor normal form} of $\alpha$.
+\end{rem}
+\begin{proof}
+We will use the \hyperref[thm:Tinduction2]{second formulation of transfinite induction}. If $\alpha = 0$ then the theorem holds vacuously. So suppose inductively that the theorem holds for all $\varepsilon < \alpha$, where $\alpha > 0$. Define $L_\alpha := \{\zeta\in\alpha : \omega^\zeta \leq \alpha\}$ and $\beta := \bigcup L_\alpha$, noting that $\beta \leq \alpha$.
+
+If $\beta<\alpha$ then we must have $\beta \in L_\alpha$, otherwise if $\beta = L_\alpha$ then $\beta$ is a limit ordinal and we obtain $\omega^\beta = \bigcup_{\varepsilon<\beta}\omega^\varepsilon \leq \alpha$ which yields the absurd $\beta \in L_\alpha = \beta$. On the other hand, if $\beta = \alpha$ then $\alpha$ is a limit ordinal and so $\omega^\alpha = \bigcup_{\varepsilon < \alpha}\omega^\varepsilon \leq \alpha$. In either case, we require $\omega^\beta \leq \alpha$.
+
+From Lemma~\ref{lem:OrdinalDivision}, there exist unique ordinals $n$ and $\gamma$ such that $\gamma < \omega^\beta$ and $\alpha = \omega^\beta n + \gamma$. Observe that we require $n\in\omega$, otherwise we can write $n = \omega + \delta$ for some ordinal $\delta$ and hence $\alpha = \omega^{\beta + 1} + \omega^\beta \delta + \gamma$. However this implies $\beta+1 \in L_\alpha$, contradicting the definition of $\beta$. Furthermore we require $n > 0$, otherwise we would obtain the contradiction $\alpha = \gamma < \omega^\beta$.
+
+If $\gamma = 0$ then we have proven the existence claim of the theorem. Otherwise, we apply the inductive hypothesis onto $\gamma$ to obtain its Cantor normal form $\gamma = \omega^{\beta_1}n_1 + \dots + \omega^{\beta_k}n_k$. Then noting that $\alpha \geq \beta > \beta_1$ completes the proof of the existence claim of the theorem.
+
+For the uniqueness claim, suppose $\alpha$ has another Cantor normal form $\alpha = \omega^{\beta_1'}n_1' + \dots + \omega^{\beta_k'}n_k'$. Suppose, for a contradiction and without loss of generality, that $\beta > \beta_1'$. Then, because both Cantor normal forms are finite sums, all $n_1',\dots,n_k'$ are natural numbers, and $\beta > \beta_1'>\dots>\beta_k'$, we obtain the contradiction $\alpha = \omega^{\beta_1'}n_1' + \dots + \omega^{\beta_k'}n_k' < \omega^\beta \leq \alpha$. Thus we require $\beta = \beta_1'$, which then clearly requires $n = n_1'$. Now as $\alpha = \omega^\beta n + \gamma$, applying the inductive hypothesis onto $\gamma$ to obtain the uniqueness of its Cantor normal form completes the proof.
+\end{proof}
+
+\subsection{Goodstein's Theorem}
+This final subsection is devoted to stating and proving Goodstein's theorem~\citep{GoodsteinPaper}, a theorem about natural numbers which is unprovable from the Peano axioms alone~\citep{GoodsteinIndependence}.
+
+Theorem~\ref{thm:CantorNormalForm} can be generalised to to any base $b \geq 2$ instead of $\omega$. This generalisation is found in Takeuti and Zaring 1982~\citep[pp. 70--71]{TakeutiZaring}, and its proof is similar to the proof of Theorem~\ref{thm:CantorNormalForm}.
+
+\begin{thm}[Basis Representation Theorem]
+\label{thm:BasisPower}
+Let $\alpha$ and $\beta$ be an ordinals with $\alpha > 0$ and $\beta \geq 2$. Then there exist a unique natural number $k$ and unique ordinals $\gamma_1,\dots, \gamma_k, \delta_1,\dots,\delta_k$ such that 
+\begin{itemize}
+\item $k \geq 1$,
+\item $0 < \delta_1, \dots, \delta_k < \beta$,
+\item $\alpha \geq \gamma_1 > \dots > \gamma_k$, and
+\item $\alpha = \beta^{\gamma_1}\delta_1 + \dots + \beta^{\gamma_k}\delta_k$.
+\end{itemize}
+\end{thm}
+\begin{rem}
+We call $\beta^{\gamma_1}\delta_1 + \dots + \beta^{\gamma_k}\delta_k$ the \textit{base-$\beta$ representation} of $\alpha$.
+\end{rem}
+
+We can recursively use Theorem~\ref{thm:BasisPower} on the exponents of basis representations for natural numbers for a base $b$ (where $b$ is a natural number) to obtain a representation using only the numbers in $\{0,1,\dots,b\}$.
+
+\begin{defn}[Hereditary Base-$b$ Representation]
+Let $m$ and $b$ be natural numbers with $b \geq 2$. The \textit{hereditary base-$b$ representation} of $m$ is a base-$b$ representation of $m$ with all its exponents (and their exponents, and so on) written in base-$b$ representation.
+\end{defn}
+\begin{rem}
+We only convert all the digits appearing in the representation which are not in the set $\{0, 1, \dots, b\}$. Hence if $1$ appears in the exponent, we do not convert it into $b^0$.
+\end{rem}
+
+\begin{eg}
+The base-$3$ representation of $250$ is $250 = 3^5 + 3^1 \cdot 2 + 3^0$. The hereditary base-$3$ representation of $250$ is $250 = 3^{3^1 + 3^0 \cdot 2} + 3^1 \cdot 2 + 3^0$.
+\end{eg}
+
+\begin{defn}[Hereditary Base Change Function]
+Let $b$ and $b'$ be natural numbers with $b,b' \geq 2$. Define the function $\mathrm{HBC}_{b, b'} \in \mathscr F(\omega\setminus\{0\}, \omega\setminus \{0\})$ as follows: for all $1 \leq m < \omega$ define $\mathrm{HBC}_{b,b'}(m)$ to be the natural number obtained by replacing all occurrences of $b$ with $b'$ in the hereditary base-$b$ representation of $m$.
+\end{defn}
+
+\begin{eg}
+$\mathrm{HBC}_{3, 5}(250) = \mathrm{HBC}_{3,5}\left(3^{3^1 + 3^0 \cdot 2} + 3^1 \cdot 2 + 3^0 \right) = 5^{5^1 + 5^0 \cdot 2} + 5^1 \cdot 2 + 5^0 = 78136$.
+\end{eg}
+
+\begin{defn}[Goodstein Sequences]
+Let $m$ be a natural number. Define the function $G_m \in \mathscr F(\omega, \omega)$ by 
+\begin{itemize}
+\item $G_m(0) := 0$,
+\item $G_m(1) := m$, and 
+\item for all $n \in \omega\setminus\{0\}$,
+\[G_m(n+1) := \begin{cases}
+\mathrm{HBC}_{n+1, n+2}(G_m(n)) - 1 &\quad \text{if } G_m(n) > 0, \\
+0 &\quad \text{if } G_m(n) = 0.
+\end{cases}\]
+\end{itemize}
+The sequence $(G_m(1), G_m(2), G_m(3), \dots)$ is the \textit{Goodstein sequence} starting with $m$.
+\end{defn}
+\begin{rem}
+This function $G_m$ exists and is unique due to the \hyperref[thm:Trecursion2]{second formulation of transfinite recursion}.
+\end{rem}
+
+Preliminary calculations of some Goodstein sequences show that the terms in Goodstein sequences get very large very rapidly~\citep{GoodsteinFunction}~\citep{FastGrowingFunctions}. For example, consider the Goodstein sequence starting with 16~\citep{GoodsteinEg}.
+
+\begin{center}
+\begin{tabular}{||c c||} 
+ \hline
+ $n$ & $G_{16}(n)$ \\
+ \hline\hline
+ $1$ & $16$ \\ 
+ \hline
+ $2$ & $7625597484986$ \\
+ \hline
+ $3$ & $50973998591214355139406377$ \\
+ \hline
+ $4$ & $53793641718868912174424175024032593379100060$ \\
+ \hline
+ $5$ & $19916489515870532960258562190639398471599239042185934648024761145811$ \\
+ \hline
+ $\vdots$ & $\vdots$ \\
+ \hline
+\end{tabular}
+\end{center}
+
+Goodstein's theorem is the startling result that any Goodstein sequence will eventually hit $0$ (and subsequently stay at $0$). The following proof is adapted from Rathjen 2015~\citep[pp. 229--242]{GoodsteinProof}.
+
+\begin{thm}[Goodstein's Theorem]
+Let $m$ be a natural number. Then there exists a natural number $N \geq 2$ such that $G_m(N) = 0$.
+\end{thm}
+\begin{proof}
+For natural numbers $n$ and $b$ with $b \geq 2$, define the term $\tau(b, n)$ to be the ordinal obtained by replacing $b$ with $\omega$ in the hereditary base-$b$ representation of $n$. Note that $\tau(b,n)$ acts as a well-defined version of $\mathrm{HBC}_{b, \omega}(n)$, giving us ordinals in \hyperref[thm:CantorNormalForm]{Cantor normal form}.
+
+Next, use the \hyperref[thm:Trecursion2]{second formulation of transfinite recursion} to define the function $P_m$ with $\mathrm{Dom}(P_m) = \omega$ by
+\begin{itemize}
+\item $P_m(0) := 0$, and
+\item for all $n \in \omega\setminus\{0\}$, 
+\[
+P_m(n) := 
+\begin{cases}
+\tau(n+1, G_m(n)) &\quad \text{if } G_m(n) > 0, \\
+0 &\quad\text{if } G_m(n) = 0.
+\end{cases}
+\]
+\end{itemize}
+Let $n \in \omega\setminus\{0\}$ and suppose that $G_m(n) > 0$ and $G_m(n+1) > 0$. Notice that we have
+\setcounter{equation}{0}
+\begin{equation}
+\label{eq:Goodstein1}
+P_m(n+1) = \tau(n+2,\ G_m(n+1)) < \tau(n+2,\ G_m(n+1) + 1).
+\end{equation}
+Furthermore, notice that
+\begin{equation}
+\label{eq:Goodstein2}
+P_m(n) = \tau(n+1,\ G_m(n)) = \tau(n+2,\ G_m(n+1) + 1).
+\end{equation}
+Combining (\ref{eq:Goodstein1}) and (\ref{eq:Goodstein2}), we conclude that $P_m(n) > P_m(n+1)$ for all $n \in \omega\setminus\{0\}$ which satisfy $G_m(n) > 0$ and $G_m(n+1)>0$.
+
+Now suppose, for a contradiction, that $(\forall n \in \omega\setminus\{0\})(G_m(n) > 0)$. Then we must have $P_m(n) > P_m(n+1)$ for all $n \in \omega\setminus\{0\}$. Define the set
+\[A := \{P_m(n) : n\in\omega\setminus\{0\}\}.\]
+Observe that $\varnothing \neq A \subseteq S(P_m(2))$. Thus by Theorem~\ref{thm:wellorderingsubset} and Theorem~\ref{thm:uniqueleast} we know that $A$ has a unique $\in_{S(P_m(2))}$-least element, say $\alpha_0$. Then $(\exists n\in\omega\setminus\{0\})(\alpha_0 = P_m(n))$. However we then obtain $P_m(n+1) < \alpha_0$, which contradicts $\alpha_0$ being the $\in_{S(P_m(2))}$-least element of $A$.
+\end{proof}
+
+\pagebreak
+\bibliography{setbiblio}
+\end{document}
